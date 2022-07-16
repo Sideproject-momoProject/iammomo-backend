@@ -40,4 +40,6 @@ public class MemberServiceImpl implements MemberService{
                         .build())
                 .collect(Collectors.toList());
     }
+
+
 }
