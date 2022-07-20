@@ -81,6 +81,5 @@ public class CategoryServiceImpl implements CategoryService{
         Optional<Category> category = categoryRepository.findById(categoryId);
         categoryRepository.delete(category.get());
         return true;
-
     }
 }

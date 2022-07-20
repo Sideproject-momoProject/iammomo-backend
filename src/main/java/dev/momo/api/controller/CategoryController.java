@@ -5,6 +5,7 @@ import dev.momo.api.category.dto.CategoryDto;
 import dev.momo.api.global.exception.SearchResultNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import dev.momo.api.global.response.BaseResponseStatus;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,11 @@ public class CategoryController {
     }
 
     @GetMapping
-    public BaseResponse<List<CategoryDto>> readAllCategory(@RequestBody CategoryDto dto){
+    public BaseResponse<List<CategoryDto>> readAllCategory(
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam(defaultValue = "9") int limit
+    ){
+        PageRequest page = PageRequest.of(offset, limit);
         return new BaseResponse<>(categoryServiceImpl.readAllCategory());
     }
 
@@ -34,7 +39,7 @@ public class CategoryController {
        if (categoryDto == null)
            return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION);
        else
-           return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+           return new BaseResponse<>(this.categoryServiceImpl.readCategory(categoryId));
     }
 
     @PutMapping("{categoryId}")
