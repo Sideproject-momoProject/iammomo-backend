@@ -2,7 +2,9 @@ package dev.momo.api.controller;
 
 import dev.momo.api.category.CategoryServiceImpl;
 import dev.momo.api.category.dto.CategoryDto;
+import dev.momo.api.global.exception.SearchResultNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
+import dev.momo.api.global.response.BaseResponseStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,20 +29,28 @@ public class CategoryController {
     }
 
     @GetMapping("{categoryId}")
-    public BaseResponse<CategoryDto> readCategory(@PathVariable("categoryId") Long categoryId){
-        return new BaseResponse<>(categoryServiceImpl.readCategory(categoryId));
-
+    public BaseResponse<CategoryDto> readCategory(@PathVariable("categoryId") Long categoryId) throws SearchResultNotFoundException {
+       CategoryDto categoryDto = this.categoryServiceImpl.readCategory(categoryId);
+       if (categoryDto == null)
+           return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION);
+       else
+           return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @PutMapping("{categoryId}")
     public BaseResponse<?> updateCategory(@PathVariable("categoryId")Long categoryId,
                                           @RequestBody CategoryDto dto){
-        return new BaseResponse<>(categoryServiceImpl.updateCategory(categoryId, dto));
+
+        if(!categoryServiceImpl.updateCategory(categoryId, dto))
+            return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @DeleteMapping("{categoryId}")
     public BaseResponse<?> deleteCategory(@PathVariable("categoryId")Long categoryId){
-        return new BaseResponse<>(categoryServiceImpl.deleteCategory(categoryId));
+        if (!categoryServiceImpl.deleteCategory(categoryId))
+            return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
 }

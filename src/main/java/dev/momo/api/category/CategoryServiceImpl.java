@@ -3,8 +3,13 @@ package dev.momo.api.category;
 import dev.momo.api.category.dto.CategoryDto;
 import dev.momo.api.category.entity.Category;
 import dev.momo.api.category.repository.CategoryRepository;
+import dev.momo.api.global.exception.SearchResultNotFoundException;
+import dev.momo.api.global.response.BaseResponse;
+import dev.momo.api.global.response.BaseResponseStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    @Transactional
+    @Transactional //트랜잭션은 데이터가 변경될 경우만 사용하기! 자원 낭비가 된다
     public CategoryDto createCategory(CategoryDto dto) {
         //CategoryEntity setter 안쓰고 저장하는법! -> builder 사용
         Category category = Category.builder()
@@ -36,7 +41,6 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    @Transactional
     public List<CategoryDto> readAllCategory() {
         return categoryRepository.findAll().stream()
                 .map(category -> CategoryDto.builder()
@@ -47,8 +51,11 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public CategoryDto readCategory(Long categoryId) {
+    public CategoryDto readCategory(Long categoryId) throws SearchResultNotFoundException {
         Optional<Category> category = categoryRepository.findById(categoryId);
+        if(category.isEmpty())
+            throw new SearchResultNotFoundException();
+
         CategoryDto categoryDto = CategoryDto.builder()
                 .categoryId(category.get().getCategoryId())
                 .category(category.get().getCategory())
@@ -57,6 +64,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @Transactional
     public boolean updateCategory(Long categoryId, CategoryDto dto) {
         Optional<Category> category = categoryRepository.findById(categoryId);
         Category category1 = Category.builder()
@@ -68,9 +76,11 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @Transactional
     public boolean deleteCategory(Long categoryId) {
         Optional<Category> category = categoryRepository.findById(categoryId);
         categoryRepository.delete(category.get());
         return true;
+
     }
 }
