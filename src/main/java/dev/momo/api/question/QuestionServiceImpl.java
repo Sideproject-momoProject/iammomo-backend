@@ -4,6 +4,7 @@ import dev.momo.api.category.dto.CategoryDto;
 import dev.momo.api.category.entity.Category;
 import dev.momo.api.category.repository.CategoryRepository;
 import dev.momo.api.global.exception.CategoryNotFoundException;
+import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.question.dto.QuestionDto;
 import dev.momo.api.question.entity.Question;
 import dev.momo.api.question.repository.QuestionRepository;
@@ -12,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +55,30 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public List<QuestionDto> readAllQuestion(Long categoryId) {
-        return null;
+    public List<QuestionDto> readAllQuestion(Long categoryId) throws CategoryNotFoundException, QuestionNotFoundException {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException();
+
+        Category category = categoryOptional.get();
+
+        if (questionRepository.findAll().isEmpty())
+            throw new QuestionNotFoundException();
+
+        CategoryDto categoryDto = CategoryDto.builder()
+                .categoryId(category.getCategoryId())
+                .category(category.getCategory())
+                .build();
+
+        return questionRepository.findAll().stream()
+                .map(question -> QuestionDto.builder()
+                        .questionId(question.getQuestionId())
+                        .question(question.getQuestion())
+                        .question(String.valueOf(question.getCreateAt()))
+                        .question(String.valueOf(question.getUpdateAt()))
+                        .categoryDto(categoryDto)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
