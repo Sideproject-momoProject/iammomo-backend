@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 @RestControllerAdvice
 public class BaseControllerAdvice {
 
-    @ExceptionHandler(SearchResultNotFoundException.class)
-    public BaseResponse<SearchResultNotFoundException>
-    test(HttpServletRequest request, HttpServletResponse response, SearchResultNotFoundException e) {
-        return new BaseResponse<SearchResultNotFoundException>(e.getStatus());
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public BaseResponse<CategoryNotFoundException>
+    test(HttpServletRequest request, HttpServletResponse response, CategoryNotFoundException e) {
+        return new BaseResponse<CategoryNotFoundException>(e.getStatus());
     }
 
 }

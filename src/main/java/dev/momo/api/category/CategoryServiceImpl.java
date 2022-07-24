@@ -3,13 +3,9 @@ package dev.momo.api.category;
 import dev.momo.api.category.dto.CategoryDto;
 import dev.momo.api.category.entity.Category;
 import dev.momo.api.category.repository.CategoryRepository;
-import dev.momo.api.global.exception.SearchResultNotFoundException;
-import dev.momo.api.global.response.BaseResponse;
-import dev.momo.api.global.response.BaseResponseStatus;
-import org.springframework.http.ResponseEntity;
+import dev.momo.api.global.exception.CategoryNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +37,10 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<CategoryDto> readAllCategory() {
+    public List<CategoryDto> readAllCategory() throws CategoryNotFoundException {
+        if(categoryRepository.findAll().isEmpty())
+            throw new CategoryNotFoundException();
+
         return categoryRepository.findAll().stream()
                 .map(category -> CategoryDto.builder()
                         .categoryId(category.getCategoryId())
@@ -51,10 +50,10 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public CategoryDto readCategory(Long categoryId) throws SearchResultNotFoundException {
+    public CategoryDto readCategory(Long categoryId) throws CategoryNotFoundException {
         Optional<Category> category = categoryRepository.findById(categoryId);
         if(category.isEmpty())
-            throw new SearchResultNotFoundException();
+            throw new CategoryNotFoundException();
 
         CategoryDto categoryDto = CategoryDto.builder()
                 .categoryId(category.get().getCategoryId())

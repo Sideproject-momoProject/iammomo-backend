@@ -2,7 +2,7 @@ package dev.momo.api.controller;
 
 import dev.momo.api.category.CategoryServiceImpl;
 import dev.momo.api.category.dto.CategoryDto;
-import dev.momo.api.global.exception.SearchResultNotFoundException;
+import dev.momo.api.global.exception.CategoryNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import dev.momo.api.global.response.BaseResponseStatus;
 import org.springframework.data.domain.PageRequest;
@@ -24,17 +24,18 @@ public class CategoryController {
         return new BaseResponse<>(categoryServiceImpl.createCategory(dto));
     }
 
+    //todo: 페이징 처리 해야함
     @GetMapping
-    public BaseResponse<List<CategoryDto>> readAllCategory(
+    public BaseResponse<List<CategoryDto>> readAllCategory (
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "9") int limit
-    ){
+    )throws CategoryNotFoundException {
         PageRequest page = PageRequest.of(offset, limit);
         return new BaseResponse<>(categoryServiceImpl.readAllCategory());
     }
 
     @GetMapping("{categoryId}")
-    public BaseResponse<CategoryDto> readCategory(@PathVariable("categoryId") Long categoryId) throws SearchResultNotFoundException {
+    public BaseResponse<CategoryDto> readCategory(@PathVariable("categoryId") Long categoryId) throws CategoryNotFoundException {
        CategoryDto categoryDto = this.categoryServiceImpl.readCategory(categoryId);
        if (categoryDto == null)
            return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION);
