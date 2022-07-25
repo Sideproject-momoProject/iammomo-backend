@@ -6,6 +6,7 @@ import dev.momo.api.category.repository.CategoryRepository;
 import dev.momo.api.global.exception.SearchResultNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import dev.momo.api.global.response.BaseResponseStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,9 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<CategoryDto> readAllCategory() {
+    public List<CategoryDto> readAllCategory(
+
+    ) {
         return categoryRepository.findAll().stream()
                 .map(category -> CategoryDto.builder()
                         .categoryId(category.getCategoryId())
@@ -49,6 +52,16 @@ public class CategoryServiceImpl implements CategoryService{
                         .build())
                 .collect(Collectors.toList());
     }
+
+//    @Override
+//    public List<CategoryDto> readAllCategory(int offset, int limit) {
+//        return categoryRepository.findAll().stream()
+//                .map(category -> CategoryDto.builder()
+//                        .categoryId(category.getCategoryId())
+//                        .category(category.getCategory())
+//                        .build())
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public CategoryDto readCategory(Long categoryId) throws SearchResultNotFoundException {
@@ -81,5 +94,16 @@ public class CategoryServiceImpl implements CategoryService{
         Optional<Category> category = categoryRepository.findById(categoryId);
         categoryRepository.delete(category.get());
         return true;
+    }
+
+    @Override
+    public List<CategoryDto> readAllCategory1 (Pageable pageable) {
+        List<CategoryDto> list = categoryRepository.findAll(pageable).stream()
+                .map(category -> CategoryDto.builder()
+                        .categoryId(category.getCategoryId())
+                        .category(category.getCategory())
+                        .build())
+                .collect(Collectors.toList());
+    return list;
     }
 }

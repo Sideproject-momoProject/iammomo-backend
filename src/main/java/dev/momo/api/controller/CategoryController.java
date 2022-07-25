@@ -2,6 +2,7 @@ package dev.momo.api.controller;
 
 import dev.momo.api.category.CategoryServiceImpl;
 import dev.momo.api.category.dto.CategoryDto;
+import dev.momo.api.category.entity.Category;
 import dev.momo.api.global.exception.SearchResultNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import dev.momo.api.global.response.BaseResponseStatus;
@@ -26,10 +27,11 @@ public class CategoryController {
 
     @GetMapping
     public BaseResponse<List<CategoryDto>> readAllCategory(
-            @RequestParam(defaultValue = "0") int offset,
-            @RequestParam(defaultValue = "9") int limit
+            @RequestParam(required = false, defaultValue = "0") int offset,
+            @RequestParam(required = false, defaultValue = "9") int limit
     ){
-        PageRequest page = PageRequest.of(offset, limit);
+        PageRequest pageable = PageRequest.of(offset, limit);
+        List<CategoryDto> result = this.categoryServiceImpl.readAllCategory1(pageable);
         return new BaseResponse<>(categoryServiceImpl.readAllCategory());
     }
 
