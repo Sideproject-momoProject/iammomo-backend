@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 public abstract class CustomBaseException extends Exception {
-
     protected BaseResponseStatus status;
 
     public CustomBaseException() {
