@@ -16,8 +16,4 @@ public class QuestionNotFoundException extends CustomBaseException {
         super(status);
     }
 
-    public BaseResponseStatus QuestionExceptionMessage(){
-        return BaseResponseStatus.NOT_FOUND_QUESTION_EXCEPTION;
-    }
-
 }

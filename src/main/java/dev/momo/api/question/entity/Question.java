@@ -30,7 +30,7 @@ public class Question extends BaseEntity {
     }
 
     @Builder
-    public Question(Long questionId, String question, Category category) {
+    public Question(Long questionId, String question,Category category) {
         this.questionId = questionId;
         this.question = question;
         this.category = category;

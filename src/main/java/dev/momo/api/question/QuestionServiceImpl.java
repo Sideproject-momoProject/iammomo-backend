@@ -44,8 +44,8 @@ public class QuestionServiceImpl implements QuestionService{
         QuestionDto questionDto = QuestionDto.builder()
                 .questionId(result.getQuestionId())
                 .question(result.getQuestion())
-                .createAt(result.getCreateAt()) //왜 null 이지
-                .update(result.getUpdateAt()) //왜 null 이지
+                .createAt(result.getCreateAt()) //todo: null 값 원인 확인
+                .update(result.getUpdateAt())
                 .categoryDto(CategoryDto.builder()
                         .categoryId(category.getCategoryId())
                         .category(category.getCategory())
@@ -82,13 +82,48 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public QuestionDto readQuestion(Long categoryId, Long questionId) {
-        return null;
+    public QuestionDto readQuestion(Long categoryId, Long questionId) throws CategoryNotFoundException, QuestionNotFoundException {
+        if (!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException();
+
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        Category category = categoryOptional.get();
+
+        CategoryDto categoryDto = CategoryDto.builder()
+                .categoryId(category.getCategoryId())
+                .category(category.getCategory())
+                .build();
+
+        if (!questionRepository.existsById(questionId))
+            throw new QuestionNotFoundException();
+
+        Optional<Question> questionOptional = questionRepository.findById(questionId);
+        Question question = questionOptional.get();
+
+        QuestionDto questionDto = QuestionDto.builder()
+                .questionId(question.getQuestionId())
+                .question(question.getQuestion())
+                .categoryDto(categoryDto)
+                .build();
+
+        return questionDto;
     }
 
     @Override
-    public boolean updateQuestion(Long categoryId, Long questionId, QuestionDto dto) {
-        return false;
+    public boolean updateQuestion(Long categoryId, Long questionId, QuestionDto dto) throws CategoryNotFoundException, QuestionNotFoundException {
+        if (!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException();
+
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        Category category = categoryOptional.get();
+
+        if (!questionRepository.existsById(questionId))
+            throw new QuestionNotFoundException();
+
+        Optional<Question> questionOptional = questionRepository.findById(questionId);
+        Question question = questionOptional.get();
+
+        return true;
     }
 
     @Override

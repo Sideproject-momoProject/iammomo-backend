@@ -10,8 +10,8 @@ public interface QuestionService {
 
     QuestionDto createQuestion(Long categoryId, QuestionDto dto) throws CategoryNotFoundException;
     List<QuestionDto> readAllQuestion(Long categoryId) throws CategoryNotFoundException, QuestionNotFoundException;
-    QuestionDto readQuestion(Long categoryId, Long questionId);
-    boolean updateQuestion(Long categoryId, Long questionId, QuestionDto dto);
+    QuestionDto readQuestion(Long categoryId, Long questionId) throws CategoryNotFoundException, QuestionNotFoundException;
+    boolean updateQuestion(Long categoryId, Long questionId, QuestionDto dto) throws CategoryNotFoundException, QuestionNotFoundException;
     boolean deleteQuestion(Long categoryId, Long questionId);
 
 }

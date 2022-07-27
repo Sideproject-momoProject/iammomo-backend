@@ -1,5 +1,6 @@
 package dev.momo.api.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import dev.momo.api.global.exception.CategoryNotFoundException;
 import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
@@ -28,6 +29,17 @@ public class QuestionController {
     public BaseResponse<List<QuestionDto>> readAllQuestion(@PathVariable("categoryId")Long categoryId) throws QuestionNotFoundException, CategoryNotFoundException {
         return new BaseResponse<>(questionService.readAllQuestion(categoryId));
     }
+
+    @GetMapping("{questionId}")
+    public BaseResponse<QuestionDto> readQuestion(@PathVariable("categoryId")Long categoryId,
+                                                  @PathVariable("questionId")Long questionId) throws QuestionNotFoundException, CategoryNotFoundException {
+        return new BaseResponse<>(questionService.readQuestion(categoryId, questionId));
+    }
+//
+//    @PutMapping("{questionId}")
+//
+//
+//    @DeleteMapping()
 
 
 
