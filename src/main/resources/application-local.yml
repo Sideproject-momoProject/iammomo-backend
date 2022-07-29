@@ -4,7 +4,7 @@ Spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3307/demo_momo
     username: demo_momo
-    password: likelion123momo
+    password: 
   jpa:
     hibernate:
       # 테스트한 내용을 남겨놓고 싶으면 update 또는 none
