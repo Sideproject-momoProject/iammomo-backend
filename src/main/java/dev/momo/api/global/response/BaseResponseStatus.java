@@ -19,8 +19,9 @@ public enum BaseResponseStatus {
 
     NOT_FOUND_CATEGORY_EXCEPTION(false,2012,"존재하지 않는 카테고리입니다"),
     NOT_FOUND_QUESTION_EXCEPTION(false,2013,"존재하지 않는 질문입니다"),
-    NOT_FOUND_POST_EXCEPTION(false,2013,"존재하지 않는 게시글 입니다"),
-    NOT_FOUND_COMMENT_EXCEPTION(false,2013,"존재하지 않는 댓글 입니다"),
+    NOT_FOUND_POST_EXCEPTION(false,2014,"존재하지 않는 게시글 입니다"),
+    NOT_FOUND_COMMENT_EXCEPTION(false,2015,"존재하지 않는 댓글 입니다"),
+
 
 
     /**

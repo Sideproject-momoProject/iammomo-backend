@@ -30,9 +30,11 @@ public class Question extends BaseEntity {
     }
 
     @Builder
-    public Question(Long questionId, String question,Category category) {
+    public Question(Long questionId, String question, Category category, Instant createAt, Instant updateAt) {
         this.questionId = questionId;
         this.question = question;
+        this.getCreateAt();
+        this.getUpdateAt();
         this.category = category;
     }
 

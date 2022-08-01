@@ -17,8 +17,8 @@ public interface CategoryService {
     List<CategoryDto> readAllCategory() throws CategoryNotFoundException;
     CategoryDto readCategory(Long categoryId) throws CategoryNotFoundException;
 
-    boolean updateCategory(Long categoryId, CategoryDto dto);
-    boolean deleteCategory(Long categoryId);
+    boolean updateCategory(Long categoryId, CategoryDto dto) throws CategoryNotFoundException;
+    boolean deleteCategory(Long categoryId) throws CategoryNotFoundException;
 
     List<CategoryDto> readAllCategory1(Pageable pageable);
 }

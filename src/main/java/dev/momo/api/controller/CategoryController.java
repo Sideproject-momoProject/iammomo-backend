@@ -48,15 +48,16 @@ public class CategoryController {
 
     @PutMapping("{categoryId}")
     public BaseResponse<?> updateCategory(@PathVariable("categoryId")Long categoryId,
-                                          @RequestBody CategoryDto dto){
+                                          @RequestBody CategoryDto dto) throws CategoryNotFoundException {
 
         if(!categoryServiceImpl.updateCategory(categoryId, dto))
-            return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION);
+            return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION); // 컨트롤러랑 exception 에러를 동시에 적용하여 관리하는 방법은...?
+
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @DeleteMapping("{categoryId}")
-    public BaseResponse<?> deleteCategory(@PathVariable("categoryId")Long categoryId){
+    public BaseResponse<?> deleteCategory(@PathVariable("categoryId")Long categoryId) throws CategoryNotFoundException {
         if (!categoryServiceImpl.deleteCategory(categoryId))
             return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_CATEGORY_EXCEPTION);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);

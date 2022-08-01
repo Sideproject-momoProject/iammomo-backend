@@ -57,15 +57,6 @@ public class CategoryServiceImpl implements CategoryService{
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<CategoryDto> readAllCategory(int offset, int limit) {
-//        return categoryRepository.findAll().stream()
-//                .map(category -> CategoryDto.builder()
-//                        .categoryId(category.getCategoryId())
-//                        .category(category.getCategory())
-//                        .build())
-//                .collect(Collectors.toList());
-//    }
 
     @Override
     public CategoryDto readCategory(Long categoryId) throws CategoryNotFoundException {
@@ -82,7 +73,10 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     @Transactional
-    public boolean updateCategory(Long categoryId, CategoryDto dto) {
+    public boolean updateCategory(Long categoryId, CategoryDto dto) throws CategoryNotFoundException {
+        if (!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException();
+
         Optional<Category> category = categoryRepository.findById(categoryId);
         Category category1 = Category.builder()
                 .categoryId(category.get().getCategoryId())
@@ -94,12 +88,16 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     @Transactional
-    public boolean deleteCategory(Long categoryId) {
+    public boolean deleteCategory(Long categoryId) throws CategoryNotFoundException {
+        if (!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException();
+
         Optional<Category> category = categoryRepository.findById(categoryId);
         categoryRepository.delete(category.get());
         return true;
     }
 
+    //패이징처리용 테스트 용도
     @Override
     public List<CategoryDto> readAllCategory1 (Pageable pageable) {
         List<CategoryDto> list = categoryRepository.findAll(pageable).stream()

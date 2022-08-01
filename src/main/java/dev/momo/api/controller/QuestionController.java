@@ -2,6 +2,7 @@ package dev.momo.api.controller;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import dev.momo.api.global.exception.CategoryNotFoundException;
+import dev.momo.api.global.exception.InvalidParamException;
 import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import dev.momo.api.question.QuestionServiceImpl;
@@ -22,6 +23,7 @@ public class QuestionController {
     @PostMapping()
     public BaseResponse<QuestionDto> createQuestion(@PathVariable("categoryId")Long categoryId,
                                                     @RequestBody QuestionDto dto) throws CategoryNotFoundException {
+
         return new BaseResponse<>(questionService.createQuestion(categoryId, dto));
     }
 
@@ -35,11 +37,19 @@ public class QuestionController {
                                                   @PathVariable("questionId")Long questionId) throws QuestionNotFoundException, CategoryNotFoundException {
         return new BaseResponse<>(questionService.readQuestion(categoryId, questionId));
     }
-//
-//    @PutMapping("{questionId}")
-//
-//
-//    @DeleteMapping()
+
+    @PutMapping("{questionId}")
+    public BaseResponse<?>updateQuestion(@PathVariable("categoryId")Long categoryId,
+                                         @PathVariable("questionId")Long questionId,
+                                         @RequestBody QuestionDto dto) throws InvalidParamException, QuestionNotFoundException, CategoryNotFoundException {
+        return new BaseResponse<>(questionService.updateQuestion(categoryId, questionId, dto));
+    }
+
+    @DeleteMapping("{questionId}")
+    public BaseResponse<?>deleteQuestion(@PathVariable("categoryId")Long categoryId,
+                                         @PathVariable("questionId")Long questionId) throws QuestionNotFoundException, CategoryNotFoundException {
+        return new BaseResponse<>(questionService.deleteQuestion(categoryId, questionId));
+    }
 
 
 
