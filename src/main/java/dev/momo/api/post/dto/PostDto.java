@@ -10,18 +10,18 @@ import lombok.Getter;
 public class PostDto {
     private Long postId;
     private String post;
-    private CategoryDto categoryDto;
-    private QuestionDto questionDto;
     private boolean isStatus;
     private boolean isDelete;
+    private QuestionDto questionDto;
+
 
     @Builder
-    public PostDto(Long postId, String post, CategoryDto categoryDto, QuestionDto questionDto, boolean isStatus, boolean isDelete) {
+    public PostDto(Long postId, String post,  boolean isStatus, boolean isDelete, QuestionDto questionDto) {
         this.postId = postId;
         this.post = post;
-        this.categoryDto = categoryDto;
-        this.questionDto = questionDto;
         this.isStatus = isStatus;
         this.isDelete = isDelete;
+        this.questionDto = questionDto;
+
     }
 }

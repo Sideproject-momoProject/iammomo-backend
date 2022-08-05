@@ -40,7 +40,6 @@ public class QuestionServiceImpl implements QuestionService{
 
         logger.info("question data : {}", dto.getQuestionId());
         Question reqQuestion = Question.builder()
-                .questionId(dto.getQuestionId())
                 .question(dto.getQuestion())
                 .build();
 

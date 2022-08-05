@@ -45,6 +45,7 @@ public class PostServiceImpl implements PostService{
                 .categoryId(reqCategory.getCategoryId())
                 .category(reqCategory.getCategory())
                 .build();
+
       // 질문 정보 가져오기
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         Question reqQuestion = questionOptional.get();
@@ -56,7 +57,6 @@ public class PostServiceImpl implements PostService{
       // 게시글 생성
         logger.info("post data : {}", dto.getPostId());
         Post reqPost = Post.builder()
-                .postId(dto.getPostId())
                 .post(dto.getPost())
                 .isStatus(dto.isStatus())
                 .isDelete(dto.isDelete())
@@ -68,13 +68,10 @@ public class PostServiceImpl implements PostService{
                 .post(resPost.getPost())
                 .isStatus(resPost.isStatus())
                 .isDelete(resPost.isDelete())
-                .categoryDto(CategoryDto.builder()
-                        .categoryId(reqCategory.getCategoryId())
-                        .category(reqCategory.getCategory())
-                        .build())
                 .questionDto(QuestionDto.builder()
                         .questionId(reqQuestion.getQuestionId())
                         .question(reqQuestion.getQuestion())
+                        .categoryDto(categoryDto)
                         .build())
                 .build();
         return postDto;

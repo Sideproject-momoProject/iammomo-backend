@@ -29,13 +29,11 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     @Transactional //트랜잭션은 데이터가 변경될 경우만 사용하기! 자원 낭비가 된다
     public CategoryDto createCategory(CategoryDto dto) {
-        //CategoryEntity setter 안쓰고 저장하는법! -> builder 사용
         Category reqCategory = Category.builder()
-                .categoryId(dto.getCategoryId())
                 .category(dto.getCategory())
                 .build();
         Category resCategory = categoryRepository.save(reqCategory);
-        //반환하기 위해서 CategoryDto 형태로 생성
+
         CategoryDto categoryDto = CategoryDto.builder()
                 .categoryId(resCategory.getCategoryId())
                 .category(resCategory.getCategory())
