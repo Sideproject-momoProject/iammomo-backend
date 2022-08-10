@@ -51,7 +51,4 @@ public class QuestionController {
         return new BaseResponse<>(questionService.deleteQuestion(categoryId, questionId));
     }
 
-
-
-
 }

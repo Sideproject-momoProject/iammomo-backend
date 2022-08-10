@@ -1,9 +1,11 @@
 package dev.momo.api.controller;
 
 import dev.momo.api.global.exception.CategoryNotFoundException;
+import dev.momo.api.global.exception.InvalidParamException;
 import dev.momo.api.global.exception.PostNotFoundException;
 import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
+import dev.momo.api.global.response.BaseResponseStatus;
 import dev.momo.api.post.PostServiceImpl;
 import dev.momo.api.post.dto.PostDto;
 import dev.momo.api.post.entity.Post;
@@ -41,7 +43,23 @@ public class PostController {
         return new BaseResponse<>(postService.readPost(categoryId,questionId, postId));
     }
 
+    //update
+    @PostMapping("{postId}")
+    public BaseResponse<PostDto> updatePost(@PathVariable("categoryId")Long categoryId,
+                                      @PathVariable("questionId")Long questionId,
+                                      @PathVariable("postId")Long postId,
+                                      @RequestBody PostDto dto) throws QuestionNotFoundException, CategoryNotFoundException, PostNotFoundException, InvalidParamException {
+        return new BaseResponse<>(postService.updatePost(categoryId,questionId,postId,dto));
+    }
 
-
+    //delete
+    @PostMapping("/delete/{postId}")
+    public BaseResponse<?> deletePost(@PathVariable("categoryId")Long categoryId,
+                                            @PathVariable("questionId")Long questionId,
+                                            @PathVariable("postId")Long postId) throws InvalidParamException, QuestionNotFoundException, CategoryNotFoundException {
+        if (!postService.deletePost(categoryId, questionId, postId))
+            return new BaseResponse<>(BaseResponseStatus.NOT_FOUND_POST_EXCEPTION);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
 
 }

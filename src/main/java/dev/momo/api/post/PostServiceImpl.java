@@ -1,9 +1,9 @@
 package dev.momo.api.post;
-
 import dev.momo.api.category.dto.CategoryDto;
 import dev.momo.api.category.entity.Category;
 import dev.momo.api.category.repository.CategoryRepository;
 import dev.momo.api.global.exception.CategoryNotFoundException;
+import dev.momo.api.global.exception.InvalidParamException;
 import dev.momo.api.global.exception.PostNotFoundException;
 import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.post.dto.PostDto;
@@ -112,6 +112,8 @@ public class PostServiceImpl implements PostService{
                         .postId(post.getPostId())
                         .post(post.getPost())
                         .questionDto(questionDto)
+                        .isUpdated(post.isUpdated())
+                        .isDeleted(post.isDeleted())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -149,6 +151,8 @@ public class PostServiceImpl implements PostService{
                .post(resPost.getPost())
                .createAt(resPost.getCreateAt())
                .updateAt(resPost.getUpdateAt())
+               .isUpdated(resPost.isUpdated())
+               .isDeleted(resPost.isDeleted())
                .questionDto(questionDto)
                .build();
        return postDto;
@@ -156,13 +160,101 @@ public class PostServiceImpl implements PostService{
 
     @Override
     @Transactional
-    public boolean updatePost(Long categoryId, Long questionId, Long postId, PostDto dto) {
-        return false;
+    public PostDto updatePost(Long categoryId, Long questionId, Long postId, PostDto dto) throws CategoryNotFoundException, QuestionNotFoundException, PostNotFoundException, InvalidParamException {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException();
+
+        Optional<Question> questionOptional = questionRepository.findById(questionId);
+        if (!questionRepository.existsById(questionId))
+            throw new QuestionNotFoundException();
+
+        Category resCategory = categoryOptional.get();
+        Question resQuestion = questionOptional.get();
+
+        CategoryDto categoryDto = CategoryDto.builder()
+                .categoryId(resCategory.getCategoryId())
+                .category(resCategory.getCategory())
+                .build();
+
+        QuestionDto questionDto = QuestionDto.builder()
+                .questionId(resQuestion.getQuestionId())
+                .question(resQuestion.getQuestion())
+                .categoryDto(categoryDto)
+                .build();
+
+        //파람 값으로 해당 게시글 확인
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if (!postOptional.get().getPostId().equals(postId))
+            throw new InvalidParamException();
+
+        //최초 생성된 데이터의 update상태를 변경
+        Post changeUpdatePost = Post.builder()
+                .postId(postOptional.get().getPostId())
+                .post(postOptional.get().getPost())
+                .isUpdated(true)
+                .isDeleted(postOptional.get().isDeleted())
+                .build();
+        this.postRepository.save(changeUpdatePost);
+
+        //새로 생성된 수정데이터를 생성
+        Post reqPost = Post.builder()
+                .post(dto.getPost()==null? postOptional.get().getPost() : dto.getPost())
+                .isUpdated(true)
+                .build();
+        Post resPost = postRepository.save(reqPost);
+
+        PostDto postDto = PostDto.builder()
+                .postId(resPost.getPostId())
+                .post(resPost.getPost())
+                .isUpdated(reqPost.isUpdated())
+                .isDeleted(resPost.isDeleted())
+                .createAt(resPost.getCreateAt())
+                .updateAt(resPost.getUpdateAt())
+                .questionDto(questionDto)
+                .build();
+        logger.info("post status Update3 : {}",String.valueOf(postDto.isUpdated()));
+        return postDto;
     }
 
-    @Override //todo: 삭제되지 않고 상태 변경이 되도록 구현
+    @Override
     @Transactional
-    public boolean deletePost(Long categoryId, Long questionId, Long postId, PostDto dto) {
-        return false;
+    public boolean deletePost(Long categoryId, Long questionId, Long postId) throws CategoryNotFoundException, QuestionNotFoundException, InvalidParamException {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (!categoryRepository.existsById(categoryId))
+            throw new CategoryNotFoundException();
+
+        Optional<Question> questionOptional = questionRepository.findById(questionId);
+        if (!questionRepository.existsById(questionId))
+            throw new QuestionNotFoundException();
+
+        Category resCategory = categoryOptional.get();
+        Question resQuestion = questionOptional.get();
+
+        CategoryDto categoryDto = CategoryDto.builder()
+                .categoryId(resCategory.getCategoryId())
+                .category(resCategory.getCategory())
+                .build();
+
+        QuestionDto questionDto = QuestionDto.builder()
+                .questionId(resQuestion.getQuestionId())
+                .question(resQuestion.getQuestion())
+                .categoryDto(categoryDto)
+                .build();
+
+        //파람 값으로 해당 게시글 확인
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if (!postOptional.get().getPostId().equals(postId))
+            throw new InvalidParamException();
+
+        //최초 생성된 데이터의 delete상태를 변경
+        Post changeUpdatePost = Post.builder()
+                .postId(postOptional.get().getPostId())
+                .post(postOptional.get().getPost())
+                .isUpdated(postOptional.get().isUpdated())
+                .isDeleted(true)
+                .build();
+        this.postRepository.save(changeUpdatePost);
+        return true;
     }
 }
