@@ -6,22 +6,27 @@ import dev.momo.api.question.dto.QuestionDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.Instant;
+
 @Getter
 public class PostDto {
     private Long postId;
     private String post;
-    private boolean isStatus;
-    private boolean isDelete;
+    private boolean isUpdated;
+    private boolean isDeleted;
+    private Instant createAt;
+    private Instant updateAt;
     private QuestionDto questionDto;
 
 
     @Builder
-    public PostDto(Long postId, String post,  boolean isStatus, boolean isDelete, QuestionDto questionDto) {
+    public PostDto(Long postId, String post, boolean isUpdated, boolean isDeleted, Instant createAt, Instant updateAt, QuestionDto questionDto) {
         this.postId = postId;
         this.post = post;
-        this.isStatus = isStatus;
-        this.isDelete = isDelete;
+        this.isUpdated = isUpdated;
+        this.isDeleted = isDeleted;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
         this.questionDto = questionDto;
-
     }
 }

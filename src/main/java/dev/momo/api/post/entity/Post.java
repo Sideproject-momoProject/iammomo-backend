@@ -22,9 +22,9 @@ public class Post  extends BaseEntity {
     private String post;
 
     @Builder.Default
-    private boolean isStatus = false;
+    private boolean isUpdated = false;
     @Builder.Default
-    private boolean isDelete = false;
+    private boolean isDeleted = false;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -44,11 +44,11 @@ public class Post  extends BaseEntity {
     }
 
     @Builder
-    public Post(long postId, String post, boolean isStatus, boolean isDelete, Category category, Question question) {
+    public Post(long postId, String post, boolean isUpdated, boolean isDeleted, Category category, Question question) {
         this.postId = postId;
         this.post = post;
-        this.isStatus = isStatus;
-        this.isDelete = isDelete;
+        this.isUpdated = isUpdated;
+        this.isDeleted = isDeleted;
         this.category = category;
         this.question = question;
     }

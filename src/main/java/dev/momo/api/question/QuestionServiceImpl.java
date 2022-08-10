@@ -48,7 +48,7 @@ public class QuestionServiceImpl implements QuestionService{
                 .questionId(resQuestion.getQuestionId())
                 .question(resQuestion.getQuestion())
                 .createAt(resQuestion.getCreateAt())
-                .update(resQuestion.getUpdateAt())
+                .updateAt(resQuestion.getUpdateAt())
                 .categoryDto(CategoryDto.builder()
                         .categoryId(resCategory.getCategoryId())
                         .category( resCategory.getCategory())
@@ -104,7 +104,7 @@ public class QuestionServiceImpl implements QuestionService{
                 .questionId(resQuestion.getQuestionId())
                 .question(resQuestion.getQuestion())
                 .createAt(resQuestion.getCreateAt()) //todo : null값 해결 필요 - 부모클래스의 값을 가져오는 방법
-                .update(resQuestion.getUpdateAt())
+                .updateAt(resQuestion.getUpdateAt())
                 .categoryDto(categoryDto)
                 .build();
         return questionDto;
