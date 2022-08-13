@@ -29,28 +29,29 @@ public class QuestionServiceImpl implements QuestionService{
 
 
     @Override
+    @Transactional
     public QuestionDto createQuestion(Long categoryId, QuestionDto dto) throws CategoryNotFoundException {
 
         if (!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException();
 
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
-        Category category = categoryOptional.get();
+        Category resCategory = categoryOptional.get();
 
-        Question question = Question.builder()
-                .questionId(dto.getQuestionId())
+        logger.info("question data : {}", dto.getQuestionId());
+        Question reqQuestion = Question.builder()
                 .question(dto.getQuestion())
                 .build();
 
-        Question result = this.questionRepository.save(question);
+        Question resQuestion = this.questionRepository.save(reqQuestion);
         QuestionDto questionDto = QuestionDto.builder()
-                .questionId(result.getQuestionId())
-                .question(result.getQuestion())
-                .createAt(result.getCreateAt())
-                .update(result.getUpdateAt())
+                .questionId(resQuestion.getQuestionId())
+                .question(resQuestion.getQuestion())
+                .createAt(resQuestion.getCreateAt())
+                .updateAt(resQuestion.getUpdateAt())
                 .categoryDto(CategoryDto.builder()
-                        .categoryId(category.getCategoryId())
-                        .category(category.getCategory())
+                        .categoryId(resCategory.getCategoryId())
+                        .category( resCategory.getCategory())
                         .build())
                 .build();
         return questionDto;
@@ -62,14 +63,13 @@ public class QuestionServiceImpl implements QuestionService{
         if (!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException();
 
-        Category category = categoryOptional.get();
-
         if (questionRepository.findAll().isEmpty())
             throw new QuestionNotFoundException();
+        Category resCategory = categoryOptional.get();
 
         CategoryDto categoryDto = CategoryDto.builder()
-                .categoryId(category.getCategoryId())
-                .category(category.getCategory())
+                .categoryId(resCategory.getCategoryId())
+                .category(resCategory.getCategory())
                 .build();
 
         return questionRepository.findAll().stream()
@@ -87,28 +87,26 @@ public class QuestionServiceImpl implements QuestionService{
             throw new CategoryNotFoundException();
 
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
-        Category category = categoryOptional.get();
+        Category resCategory = categoryOptional.get();
 
         CategoryDto categoryDto = CategoryDto.builder()
-                .categoryId(category.getCategoryId())
-                .category(category.getCategory())
+                .categoryId(resCategory.getCategoryId())
+                .category(resCategory.getCategory())
                 .build();
 
         if (!questionRepository.existsById(questionId))
             throw new QuestionNotFoundException();
 
         Optional<Question> questionOptional = questionRepository.findById(questionId);
-        Question question = questionOptional.get();
-
+        Question resQuestion = questionOptional.get();
 
         QuestionDto questionDto = QuestionDto.builder()
-                .questionId(question.getQuestionId())
-                .question(question.getQuestion())
-                .createAt(question.getCreateAt()) //todo : null값 해결 필요 - 부모클래스의 값을 가져오는 방법
-                .update(question.getUpdateAt())
+                .questionId(resQuestion.getQuestionId())
+                .question(resQuestion.getQuestion())
+                .createAt(resQuestion.getCreateAt()) //todo : null값 해결 필요 - 부모클래스의 값을 가져오는 방법
+                .updateAt(resQuestion.getUpdateAt())
                 .categoryDto(categoryDto)
                 .build();
-
         return questionDto;
     }
 
@@ -125,18 +123,16 @@ public class QuestionServiceImpl implements QuestionService{
        if (!questionOptional.get().getQuestionId().equals(questionId)) //저장된 값이 맞는지 확인 여부
             throw new InvalidParamException();
 
-       Question saveData = Question.builder()
+       Question reqQuestion = Question.builder()
                .questionId(questionOptional.get().getQuestionId())
                .question( dto.getQuestion()== null ? questionOptional.get().getQuestion() : dto.getQuestion())
                .build();
-
-       logger.info("들어온 dto 값{}.",dto.getQuestion());
-       logger.info("기존의 값{}.",questionOptional.get().getQuestion());
-       this.questionRepository.save(saveData);
+       this.questionRepository.save(reqQuestion);
        return true;
     }
 
     @Override
+    @Transactional
     public boolean deleteQuestion(Long categoryId, Long questionId) throws CategoryNotFoundException, QuestionNotFoundException {
         if (!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException();

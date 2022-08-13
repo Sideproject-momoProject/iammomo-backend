@@ -29,16 +29,14 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     @Transactional //트랜잭션은 데이터가 변경될 경우만 사용하기! 자원 낭비가 된다
     public CategoryDto createCategory(CategoryDto dto) {
-        //CategoryEntity setter 안쓰고 저장하는법! -> builder 사용
-        Category category = Category.builder()
-                .categoryId(dto.getCategoryId())
+        Category reqCategory = Category.builder()
                 .category(dto.getCategory())
                 .build();
-        Category result = categoryRepository.save(category);
-        //반환하기 위해서 CategoryDto 형태로 생성
+        Category resCategory = categoryRepository.save(reqCategory);
+
         CategoryDto categoryDto = CategoryDto.builder()
-                .categoryId(result.getCategoryId())
-                .category(result.getCategory())
+                .categoryId(resCategory.getCategoryId())
+                .category(resCategory.getCategory())
                 .build();
         return categoryDto;
     }
@@ -60,13 +58,13 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryDto readCategory(Long categoryId) throws CategoryNotFoundException {
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        if(category.isEmpty())
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if(categoryOptional.isEmpty())
             throw new CategoryNotFoundException();
 
         CategoryDto categoryDto = CategoryDto.builder()
-                .categoryId(category.get().getCategoryId())
-                .category(category.get().getCategory())
+                .categoryId(categoryOptional.get().getCategoryId())
+                .category(categoryOptional.get().getCategory())
                 .build();
         return  categoryDto;
     }
@@ -77,12 +75,12 @@ public class CategoryServiceImpl implements CategoryService{
         if (!categoryRepository.existsById(categoryId))
             throw new CategoryNotFoundException();
 
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        Category category1 = Category.builder()
-                .categoryId(category.get().getCategoryId())
-                .category(dto.getCategory())
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        Category reqCategory = Category.builder()
+                .categoryId(categoryOptional.get().getCategoryId())
+                .category(dto.getCategory()== null?  categoryOptional.get().getCategory() : dto.getCategory())
                 .build();
-        categoryRepository.save(category1);
+        categoryRepository.save(reqCategory);
         return true;
     }
 
