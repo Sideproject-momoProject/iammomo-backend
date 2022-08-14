@@ -1,5 +1,6 @@
 package dev.momo.api.board.entity;
 
+import dev.momo.api.board.BoardStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,11 +16,7 @@ public class Post  extends BaseEntity {
     @Column(name = "post_id")
     private Long postId;
     private String post;
-
-    @Builder.Default
-    private boolean isUpdated = false;
-    @Builder.Default
-    private boolean isDeleted = false;
+    private BoardStatus boardStatus;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -39,11 +36,10 @@ public class Post  extends BaseEntity {
     }
 
     @Builder
-    public Post(long postId, String post, boolean isUpdated, boolean isDeleted, Category category, Question question) {
+    public Post(Long postId, String post, BoardStatus boardStatus, Category category, Question question) {
         this.postId = postId;
         this.post = post;
-        this.isUpdated = isUpdated;
-        this.isDeleted = isDeleted;
+        this.boardStatus = boardStatus;
         this.category = category;
         this.question = question;
     }

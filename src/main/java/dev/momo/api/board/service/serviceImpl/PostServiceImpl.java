@@ -1,4 +1,5 @@
 package dev.momo.api.board.service.serviceImpl;
+import dev.momo.api.board.BoardStatus;
 import dev.momo.api.board.dto.PostDto;
 import dev.momo.api.board.repository.PostRepository;
 import dev.momo.api.board.dto.CategoryDto;
@@ -60,16 +61,16 @@ public class PostServiceImpl implements PostService {
         logger.info("post data : {}", dto.getPostId());
         Post reqPost = Post.builder()
                 .post(dto.getPost())
-                .isUpdated(dto.isUpdated())
-                .isDeleted(dto.isDeleted())
+                .boardStatus(BoardStatus.NORMAL)
                 .build();
+        logger.info("들어온값{}",dto.getPost());
+        logger.info("저장된값{}",reqPost.getPost());
 
         Post resPost = postRepository.save(reqPost);
         PostDto postDto = PostDto.builder()
                 .postId(resPost.getPostId())
                 .post(resPost.getPost())
-                .isUpdated(resPost.isUpdated())
-                .isDeleted(resPost.isDeleted())
+                .boardStatus(resPost.getBoardStatus())
                 .createAt(resPost.getCreateAt())
                 .updateAt(resPost.getUpdateAt())
                 .questionDto(QuestionDto.builder()
@@ -78,6 +79,7 @@ public class PostServiceImpl implements PostService {
                         .categoryDto(categoryDto)
                         .build())
                 .build();
+        logger.info("반환값{}", postDto.getPost());
         return postDto;
     }
 
@@ -113,8 +115,7 @@ public class PostServiceImpl implements PostService {
                         .postId(post.getPostId())
                         .post(post.getPost())
                         .questionDto(questionDto)
-                        .isUpdated(post.isUpdated())
-                        .isDeleted(post.isDeleted())
+                        .boardStatus(post.getBoardStatus())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -152,8 +153,7 @@ public class PostServiceImpl implements PostService {
                .post(resPost.getPost())
                .createAt(resPost.getCreateAt())
                .updateAt(resPost.getUpdateAt())
-               .isUpdated(resPost.isUpdated())
-               .isDeleted(resPost.isDeleted())
+               .boardStatus(resPost.getBoardStatus())
                .questionDto(questionDto)
                .build();
        return postDto;
@@ -193,28 +193,25 @@ public class PostServiceImpl implements PostService {
         Post changeUpdatePost = Post.builder()
                 .postId(postOptional.get().getPostId())
                 .post(postOptional.get().getPost())
-                .isUpdated(true)
-                .isDeleted(postOptional.get().isDeleted())
+                .boardStatus(BoardStatus.UPDATED)
                 .build();
         this.postRepository.save(changeUpdatePost);
 
         //새로 생성된 수정데이터를 생성
         Post reqPost = Post.builder()
                 .post(dto.getPost()==null? postOptional.get().getPost() : dto.getPost())
-                .isUpdated(true)
+                .boardStatus(changeUpdatePost.getBoardStatus())
                 .build();
         Post resPost = postRepository.save(reqPost);
 
         PostDto postDto = PostDto.builder()
                 .postId(resPost.getPostId())
                 .post(resPost.getPost())
-                .isUpdated(reqPost.isUpdated())
-                .isDeleted(resPost.isDeleted())
+                .boardStatus(resPost.getBoardStatus())
                 .createAt(resPost.getCreateAt())
                 .updateAt(resPost.getUpdateAt())
                 .questionDto(questionDto)
                 .build();
-        logger.info("post status Update3 : {}",String.valueOf(postDto.isUpdated()));
         return postDto;
     }
 
@@ -252,8 +249,7 @@ public class PostServiceImpl implements PostService {
         Post changeUpdatePost = Post.builder()
                 .postId(postOptional.get().getPostId())
                 .post(postOptional.get().getPost())
-                .isUpdated(postOptional.get().isUpdated())
-                .isDeleted(true)
+                .boardStatus(BoardStatus.DELETED)
                 .build();
         this.postRepository.save(changeUpdatePost);
         return true;
