@@ -1,4 +1,4 @@
-package dev.momo.api.board;
+package dev.momo.api.board.entity;
 
 import lombok.Builder;
 import lombok.Data;

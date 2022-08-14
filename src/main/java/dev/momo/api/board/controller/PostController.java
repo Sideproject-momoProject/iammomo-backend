@@ -1,9 +1,5 @@
 package dev.momo.api.board.controller;
 
-import dev.momo.api.global.exception.CategoryNotFoundException;
-import dev.momo.api.global.exception.InvalidParamException;
-import dev.momo.api.global.exception.PostNotFoundException;
-import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import dev.momo.api.global.response.BaseResponseStatus;
 import dev.momo.api.board.service.serviceImpl.PostServiceImpl;
@@ -41,8 +37,8 @@ public class PostController {
         return new BaseResponse<>(postService.readPost(categoryId,questionId, postId));
     }
 
-    //update
-    @PostMapping("{postId}")
+
+    @PutMapping("{postId}")
     public BaseResponse<PostDto> updatePost(@PathVariable("categoryId")Long categoryId,
                                       @PathVariable("questionId")Long questionId,
                                       @PathVariable("postId")Long postId,
@@ -50,8 +46,8 @@ public class PostController {
         return new BaseResponse<>(postService.updatePost(categoryId,questionId,postId,dto));
     }
 
-    //delete
-    @PostMapping("/delete/{postId}")
+
+    @DeleteMapping("{postId}")
     public BaseResponse<?> deletePost(@PathVariable("categoryId")Long categoryId,
                                             @PathVariable("questionId")Long questionId,
                                             @PathVariable("postId")Long postId)  {

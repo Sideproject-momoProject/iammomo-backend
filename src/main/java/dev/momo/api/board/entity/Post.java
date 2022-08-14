@@ -1,6 +1,5 @@
 package dev.momo.api.board.entity;
 
-import dev.momo.api.board.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 
