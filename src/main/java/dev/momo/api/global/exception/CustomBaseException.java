@@ -4,7 +4,7 @@ import dev.momo.api.global.response.BaseResponseStatus;
 import lombok.Getter;
 
 @Getter
-public abstract class CustomBaseException extends Exception {
+public abstract class CustomBaseException extends RuntimeException {
     protected BaseResponseStatus status;
 
     public CustomBaseException() {
