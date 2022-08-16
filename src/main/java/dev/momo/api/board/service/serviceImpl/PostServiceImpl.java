@@ -79,6 +79,7 @@ public class PostServiceImpl implements PostService {
                         .categoryDto(categoryDto)
                         .build())
                 .build();
+
         logger.info("반환값{}", postDto.getPost());
         return postDto;
     }
