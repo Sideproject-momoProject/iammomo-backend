@@ -1,5 +1,6 @@
 package dev.momo.api.global.exception;
 
+import dev.momo.api.global.exception.common.CustomBaseException;
 import dev.momo.api.global.response.BaseResponseStatus;
 
 public class CategoryNotFoundException extends CustomBaseException {

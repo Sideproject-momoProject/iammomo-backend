@@ -7,7 +7,7 @@ import dev.momo.api.board.entity.Category;
 import dev.momo.api.board.repository.CategoryRepository;
 import dev.momo.api.board.service.PostService;
 import dev.momo.api.global.exception.CategoryNotFoundException;
-import dev.momo.api.global.exception.InvalidParamException;
+import dev.momo.api.global.exception.common.InvalidParamException;
 import dev.momo.api.global.exception.PostNotFoundException;
 import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.board.entity.Post;
@@ -52,16 +52,12 @@ public class PostServiceImpl implements PostService {
       // 질문 정보 가져오기
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         Question reqQuestion = questionOptional.get();
-        QuestionDto questionDto = QuestionDto.builder()
-                .questionId(reqQuestion.getQuestionId())
-                .question(reqQuestion.getQuestion())
-                .build();
 
       // 게시글 생성
         logger.info("post data : {}", dto.getPostId());
         Post reqPost = Post.builder()
                 .post(dto.getPost())
-                .boardStatus(BoardStatus.NORMAL)
+                .boardStatus(BoardStatus.NOT_CHANGED)
                 .build();
         logger.info("들어온값{}",dto.getPost());
         logger.info("저장된값{}",reqPost.getPost());
@@ -70,7 +66,7 @@ public class PostServiceImpl implements PostService {
         PostDto postDto = PostDto.builder()
                 .postId(resPost.getPostId())
                 .post(resPost.getPost())
-                .boardStatus(resPost.getBoardStatus())
+                .boardStatus(reqPost.getBoardStatus())
                 .createAt(resPost.getCreateAt())
                 .updateAt(resPost.getUpdateAt())
                 .questionDto(QuestionDto.builder()
@@ -79,7 +75,6 @@ public class PostServiceImpl implements PostService {
                         .categoryDto(categoryDto)
                         .build())
                 .build();
-        logger.info("반환값{}", postDto.getPost());
         return postDto;
     }
 

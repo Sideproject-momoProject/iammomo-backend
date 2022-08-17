@@ -1,8 +1,5 @@
 package dev.momo.api.board.controller;
 
-import dev.momo.api.global.exception.CategoryNotFoundException;
-import dev.momo.api.global.exception.InvalidParamException;
-import dev.momo.api.global.exception.QuestionNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import dev.momo.api.board.service.serviceImpl.QuestionServiceImpl;
 import dev.momo.api.board.dto.QuestionDto;

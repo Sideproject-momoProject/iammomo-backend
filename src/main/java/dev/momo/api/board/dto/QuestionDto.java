@@ -1,6 +1,7 @@
 package dev.momo.api.board.dto;
 
 import dev.momo.api.board.dto.CategoryDto;
+import dev.momo.api.board.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
 

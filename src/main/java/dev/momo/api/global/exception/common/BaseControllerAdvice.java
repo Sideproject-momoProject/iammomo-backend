@@ -1,5 +1,6 @@
-package dev.momo.api.global.exception;
+package dev.momo.api.global.exception.common;
 
+import dev.momo.api.global.exception.CategoryNotFoundException;
 import dev.momo.api.global.response.BaseResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
