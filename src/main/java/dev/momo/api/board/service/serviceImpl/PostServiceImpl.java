@@ -52,10 +52,10 @@ public class PostServiceImpl implements PostService {
       // 질문 정보 가져오기
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         Question reqQuestion = questionOptional.get();
-        QuestionDto questionDto = QuestionDto.builder()
-                .questionId(reqQuestion.getQuestionId())
-                .question(reqQuestion.getQuestion())
-                .build();
+//        QuestionDto questionDto = QuestionDto.builder()
+//                .questionId(reqQuestion.getQuestionId())
+//                .question(reqQuestion.getQuestion())
+//                .build();
 
       // 게시글 생성
         logger.info("post data : {}", dto.getPostId());
@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
         PostDto postDto = PostDto.builder()
                 .postId(resPost.getPostId())
                 .post(resPost.getPost())
-                .boardStatus(resPost.getBoardStatus())
+                .boardStatus(BoardStatus.NORMAL)
                 .createAt(resPost.getCreateAt())
                 .updateAt(resPost.getUpdateAt())
                 .questionDto(QuestionDto.builder()
@@ -79,8 +79,6 @@ public class PostServiceImpl implements PostService {
                         .categoryDto(categoryDto)
                         .build())
                 .build();
-
-        logger.info("반환값{}", postDto.getPost());
         return postDto;
     }
 
