@@ -1,5 +1,6 @@
 package dev.momo.api.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.momo.api.board.BoardStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,4 +26,18 @@ public class PostDto {
         this.updateAt = updateAt;
         this.questionDto = questionDto;
     }
+
+
+    public PostDto convertToDto(QuestionDto questionDto) {
+        PostDto postCovert = PostDto.builder()
+                .postId(getPostId())
+                .post(getPost())
+                .questionDto(QuestionDto.builder()
+                        .questionId(getQuestionDto().getQuestionId())
+                        .question(getQuestionDto().getQuestion())
+                        .build())
+                .build();
+        return postCovert;
+    }
+
 }

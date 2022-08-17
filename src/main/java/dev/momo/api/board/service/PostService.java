@@ -2,7 +2,7 @@ package dev.momo.api.board.service;
 
 import dev.momo.api.board.dto.PostDto;
 import dev.momo.api.global.exception.CategoryNotFoundException;
-import dev.momo.api.global.exception.InvalidParamException;
+import dev.momo.api.global.exception.common.InvalidParamException;
 import dev.momo.api.global.exception.PostNotFoundException;
 import dev.momo.api.global.exception.QuestionNotFoundException;
 

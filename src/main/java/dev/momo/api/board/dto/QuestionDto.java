@@ -24,12 +24,4 @@ public class QuestionDto {
         this.categoryDto = categoryDto;
     }
 
-    public static QuestionDto convertToDto(Question question){
-        QuestionDto convert = QuestionDto.builder()
-                .questionId(question.getQuestionId())
-                .question(question.getQuestion())
-                .build();
-        return convert;
-    }
-
 }

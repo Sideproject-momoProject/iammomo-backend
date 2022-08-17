@@ -1,10 +1,7 @@
 package dev.momo.api.board;
 
-
-
-
 public enum BoardStatus {
-    NORMAL,
+    NOT_CHANGED,
     UPDATED,
     DELETED
 }
