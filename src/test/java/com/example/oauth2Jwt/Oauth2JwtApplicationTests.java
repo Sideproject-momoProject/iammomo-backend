@@ -1,13 +1,13 @@
-package dev.momo.api;
+package com.example.oauth2Jwt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MomoApplicationTests {
+class Oauth2JwtApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }
