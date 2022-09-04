@@ -1,7 +1,7 @@
 package dev.momo.api.board.controller;
 
 import dev.momo.api.global.response.BaseResponse;
-import dev.momo.api.member.MemberService;
+import dev.momo.api.member.service.MemberService;
 import dev.momo.api.member.dto.MemberDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
