@@ -28,7 +28,6 @@ public class CategoryController {
 
     //todo: 페이징 처리 해야함
     @GetMapping
-
     public BaseResponse<List<CategoryDto>> readAllCategory (
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "9") int limit
